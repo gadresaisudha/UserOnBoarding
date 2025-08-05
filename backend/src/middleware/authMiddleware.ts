@@ -8,7 +8,7 @@ interface CustomRequest extends Request {
 
 export const protect = (req: CustomRequest, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
-  console.log(req.headers.authorization);
+  //console.log(req.headers.authorization);
   if (!token) return res.status(403).json({ msg: 'Access Denied: No Token' });
 
   try {
