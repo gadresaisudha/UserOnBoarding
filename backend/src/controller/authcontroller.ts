@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 
 export const login = async(req:Request, res:Response)=>{
-    console.log('hello');
+   
     const {email,password} = req.body;
     if(!email|| !password){ return res.status(400).json({msg :'Missing Credentials'})};
 
@@ -24,4 +24,5 @@ export const login = async(req:Request, res:Response)=>{
       return res.json({ token, user });
 
 }
+
 
