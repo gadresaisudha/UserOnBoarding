@@ -12,6 +12,8 @@ const api = axios.create({
 // Get all users
 export const fetchUsers = () => api.get('/data');
 
-// Add more API functions here as needed (POST, PUT, etc.)
+//post login details
+export const login = (email: string, password: string) =>
+  api.post('/auth', { email, password });
 
 export default api;
