@@ -24,3 +24,24 @@ export const getAllUserDetails = async(req: CustomRequest, res: Response)=>{
       res.status(500).json({ msg: 'Server error fetching users' });
     }
 }
+
+export const getUserDetails = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId; // should be set by auth middleware
+
+    if (!userId) {
+      return res.status(401).json({ msg: 'Unauthorized: No user ID' });
+    }
+
+    const user = await User.findById(userId).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};

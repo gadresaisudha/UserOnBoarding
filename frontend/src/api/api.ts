@@ -16,4 +16,21 @@ export const fetchUsers = () => api.get('/data');
 export const login = (email: string, password: string) =>
   api.post('/auth', { email, password });
 
+export const getAdminConfig = ()=> api.get('/admin-config');
+export const postAdminConfig = (config: { step2: string[]; step3: string[] }) =>
+  api.post('/admin-config', config);
+
+export const updateUserDetails = (data: Partial<{
+  aboutMe: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipcode: string;
+  };
+  birthdate: string;
+}>) => api.put('/auth/user', data);
+
+// Get current logged-in user details
+export const getUserDetails = () => api.get('/auth/user');
 export default api;
