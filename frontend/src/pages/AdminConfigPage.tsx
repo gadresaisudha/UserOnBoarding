@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAdminConfig, postAdminConfig } from '../api/api';
+import { useNavigate } from 'react-router-dom';
+import BackButton from '../components/backbutton';
 
 const components = ['aboutMe', 'address', 'birthdate'];
 
@@ -12,7 +14,7 @@ const AdminConfigPage = () => {
   const [config, setConfig] = useState<Config>({ step2: [], step3: [] });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   // Fetch current admin configuration from backend
   useEffect(() => {
     const fetchConfig = async () => {
@@ -49,8 +51,9 @@ const AdminConfigPage = () => {
 
     try {
       await postAdminConfig(config);
-      alert('Configuration saved!');
+      //alert('Configuration saved!');
       setError('');
+      navigate('/'); 
     } catch {
       setError('Failed to save configuration');
     }
@@ -60,7 +63,11 @@ const AdminConfigPage = () => {
 
   return (
     <div style={{ maxWidth: 600, margin: 'auto', padding: 20 }}>
-      <h2>Admin Onboarding Configuration</h2>
+   
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+    <BackButton />
+    <h2 style={{ margin: 0 }}>Admin Onboarding Configuration</h2>
+    </div>   
 
       <div>
         <h3>Step 2 Components</h3>
@@ -95,6 +102,7 @@ const AdminConfigPage = () => {
       <button style={{ marginTop: 20 }} onClick={handleSubmit}>
         Save Configuration
       </button>
+
     </div>
   );
 };

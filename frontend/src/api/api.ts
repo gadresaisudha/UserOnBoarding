@@ -29,8 +29,22 @@ export const updateUserDetails = (data: Partial<{
     zipcode: string;
   };
   birthdate: string;
-}>) => api.put('/auth/user', data);
+}>) => {
+  const token = localStorage.getItem('token');
+  return api.put('/auth/user', data,{headers: {
+  Authorization: `Bearer ${token}`,
+},
+  });
+  };
 
 // Get current logged-in user details
-export const getUserDetails = () => api.get('/auth/user');
+export const getUserDetails = () => {
+  const token = localStorage.getItem('token');
+  return api.get('/auth/user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export default api;

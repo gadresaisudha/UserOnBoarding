@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/api';
+import BackButton from '../../components/backbutton';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -35,7 +36,10 @@ const LoginPage = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>User Onboarding - Step 1</h2>
+     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+      <BackButton />
+      <h2 style={{ margin: 0 }}>User Onboarding</h2>
+    </div>
       <form onSubmit={handleSubmit} style={{ marginTop: '20px', maxWidth: '400px' }}>
         <div>
           <label>Email:</label>

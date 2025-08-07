@@ -1,13 +1,13 @@
 export interface User {
   _id: string;
   email: string;
-  aboutMe?: string;
+  aboutme?: string;
   birthdate?: string;
   address?: {
     street: string;
     city: string;
     state: string;
-    zip: string;
+    zipcode: string;
   };
   createdAt?: string;
 }

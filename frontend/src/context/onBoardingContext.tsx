@@ -1,44 +1,74 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { getAdminConfig } from '../api/api';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getAdminConfig, getUserDetails } from '../api/api';
 
-type Config = {
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  zipcode: string;
+}
+
+export interface User {
+  email: string;
+  aboutme?: string;
+  birthdate?: string;
+  address?: Address;
+}
+
+export interface Config {
   step2: string[];
   step3: string[];
-};
+}
 
-type OnboardingContextType = {
+interface OnboardingContextType {
   config: Config | null;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
-};
+  error: string | null;
+}
 
-const OnboardingContext = createContext<OnboardingContextType>({
-  config: null,
-  loading: true,
-});
+const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
 
-export const OnboardingProvider = ({ children }: { children: ReactNode }) => {
+export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [config, setConfig] = useState<Config | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const load = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await getAdminConfig();
-        setConfig(res.data);
+        const [configRes, userRes] = await Promise.all([
+          getAdminConfig(),
+          getUserDetails(),
+        ]);
+
+        setConfig(configRes.data);
+        setUser(userRes.data);
       } catch (err) {
-        console.error('Failed to fetch config');
+        console.error('Failed to load onboarding data', err);
+        setError('Failed to load onboarding data');
       } finally {
         setLoading(false);
       }
     };
-    load();
+
+    fetchAll();
   }, []);
 
   return (
-    <OnboardingContext.Provider value={{ config, loading }}>
+    <OnboardingContext.Provider value={{ config, user, setUser, loading, error }}>
       {children}
     </OnboardingContext.Provider>
   );
 };
 
-export const useOnboarding = () => useContext(OnboardingContext);
+// Custom hook
+export const useOnboarding = () => {
+  const context = useContext(OnboardingContext);
+  if (context === undefined) {
+    throw new Error('useOnboarding must be used within OnboardingProvider');
+  }
+  return context;
+};

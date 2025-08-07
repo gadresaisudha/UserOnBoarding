@@ -4,7 +4,7 @@ interface Address {
   street: string;
   city: string;
   state: string;
-  zip: string;
+  zipcode: string;
 }
 
 interface Props {
@@ -42,8 +42,8 @@ const AddressField: React.FC<Props> = ({ value, onChange }) => {
         style={{ display: 'block', marginBottom: '5px' }}
       />
       <input
-        name="zip"
-        value={value.zip}
+        name="zipcode"
+        value={value.zipcode}
         onChange={handleChange}
         placeholder="Zip Code"
         style={{ display: 'block', marginBottom: '5px' }}

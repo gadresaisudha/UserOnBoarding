@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchUsers } from '../api/api';
 import { User } from '../types/User';
+import BackButton from '../components/backbutton';
 
 const DataTablePage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -15,7 +16,10 @@ const DataTablePage = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>User Data Table</h2>
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+      <BackButton />
+      <h2 style={{ margin: 0 }}>User Data Table</h2>
+    </div>
       {loading ? (
         <p>Loading users...</p>
       ) : (
@@ -33,11 +37,11 @@ const DataTablePage = () => {
             {users.map(user => (
               <tr key={user._id}>
                 <td>{user.email}</td>
-                <td>{user.aboutMe || '-'}</td>
+                <td>{user.aboutme || '-'}</td>
                 <td>{user.birthdate || '-'}</td>
                 <td>
                   {user.address
-                    ? `${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.zip}`
+                    ? `${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.zipcode}`
                     : '-'}
                 </td>
                 <td>{user.createdAt ? new Date(user.createdAt).toLocaleString() : '-'}</td>
@@ -46,6 +50,8 @@ const DataTablePage = () => {
           </tbody>
         </table>
       )}
+
+  
     </div>
   );
 };
